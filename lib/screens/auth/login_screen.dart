@@ -2,10 +2,7 @@ import 'dart:math' as math;
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
-/// 🌾 Fasal Sarathi – Animated Farmer Login Screen
-/// - No external images
-/// - Green animated theme (sun, leaves, particles)
-/// - Send OTP → Enter OTP → Login flow (simulated)
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,7 +17,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   final FocusNode _otpFocus = FocusNode();
 
   late final AnimationController _animController;
-  bool _isLoading = false;
+  //bool _isLoading = false; bad practise to do so
+  bool isSendingOtp = false;
+  bool isLoggingIn = false;
   bool _otpSent = false;
 
   @override
@@ -45,10 +44,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       return;
     }
 
-    setState(() => _isLoading = true);
+    setState(() => isSendingOtp = true);
     await Future.delayed(const Duration(milliseconds: 900));
     setState(() {
-      _isLoading = false;
+      //_isLoading = false;
       _otpSent = true;
     });
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('OTP sent — enter it below')));
@@ -66,9 +65,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       return;
     }
 
-    setState(() => _isLoading = true);
+    setState(() => isLoggingIn = true);
     await Future.delayed(const Duration(milliseconds: 900));
-    setState(() => _isLoading = false);
+    setState(() => isLoggingIn = false);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Logged in — Welcome, Farmer! 🌿')));
   }
 
@@ -234,10 +233,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                     keyboardType: TextInputType.phone,
                                     decoration: InputDecoration(
                                       prefixIcon: const Icon(Icons.smartphone_outlined),
-                                      hintText: 'Mobile Number',
+                                      hintText: 'Mobile Number',hintStyle: TextStyle(color: Colors.black),
                                       filled: true,
                                       fillColor: lightGreen.withOpacity(0.6),
-                                      labelText: 'Mobile',
+                                      //labelText: 'Mobile',
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
                                         borderSide: BorderSide.none,
@@ -259,7 +258,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                           width: 16,
                                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                                         )
-                                      : Text(_otpSent ? 'Resend' : 'Send OTP'),
+                                      : Text(_otpSent ? 'Resend' : 'Send OTP',style: TextStyle(color: Colors.white)),
                                 ),
                               ],
                             ),
@@ -278,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   decoration: InputDecoration(
                                     prefixIcon: const Icon(Icons.key_outlined),
                                     hintText: 'Enter OTP',
-                                    labelText: 'OTP',
+                                    //labelText: 'OTP',
                                     filled: true,
                                     fillColor: lightGreen.withOpacity(0.6),
                                     border: OutlineInputBorder(
@@ -301,13 +300,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                               children: [
                                 TextButton.icon(
                                   onPressed: () {},
-                                  icon: const Icon(Icons.info_outline, size: 18),
-                                  label: const Text('Help'),
-                                  style: TextButton.styleFrom(foregroundColor: darkGreen),
+                                  icon: const Icon(Icons.info_outline, size: 18,color: Colors.green),
+                                  label: const Text('Help',style: TextStyle(color: Colors.green)),
+                                  //style: TextButton.styleFrom(foregroundColor: lightGreen),
                                 ),
                                 TextButton(
                                   onPressed: () {},
-                                  child: const Text('New Farmer? Sign Up'),
+                                  child: const Text('New Farmer? Sign Up',
+                                  style: TextStyle(color: Colors.green)),
                                 ),
                               ],
                             ),
@@ -355,7 +355,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             Text(
                               'By continuing you agree to Fasal Sarathi Terms & Conditions',
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 12, color: darkGreen.withOpacity(0.7)),
+                              style: TextStyle(fontSize: 12, color: Colors.green),
                             ),
                           ],
                         ),
