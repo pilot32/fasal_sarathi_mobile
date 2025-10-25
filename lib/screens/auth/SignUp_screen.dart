@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
+class _SignupScreenState extends State<SignupScreen> with SingleTickerProviderStateMixin {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
   final FocusNode _otpFocus = FocusNode();
@@ -73,36 +73,36 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     finally {
       //stopping animation when its done
 
-        if (mounted) {
-          _animController.stop();
-          _animController.reset();
-          setState(() {
-            isSendingOtp = false;
-          });
-        }
+      if (mounted) {
+        _animController.stop();
+        _animController.reset();
+        setState(() {
+          isSendingOtp = false;
+        });
+      }
 
     }
   }
 
-    Future<void> _onLoginPressed() async {
-      if (!_otpSent) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Request OTP first')));
-        return;
-      }
-      final otp = _otpController.text.trim();
-      if (otp.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Enter OTP')));
-        return;
-      }
-
-      setState(() => isLoggingIn = true);
-      await Future.delayed(const Duration(milliseconds: 900));
-      setState(() => isLoggingIn = false);
+  Future<void> _onLoginPressed() async {
+    if (!_otpSent) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logged in — Welcome, Farmer! 🌿')));
+          const SnackBar(content: Text('Request OTP first')));
+      return;
     }
+    final otp = _otpController.text.trim();
+    if (otp.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Enter OTP')));
+      return;
+    }
+
+    setState(() => isLoggingIn = true);
+    await Future.delayed(const Duration(milliseconds: 900));
+    setState(() => isLoggingIn = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('New — Welcome, Farmer! 🌿')));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     FadeInUp(
                       duration: const Duration(milliseconds: 400),
                       child: Text(
-                        'Sign in to continue with Fasal Sarathi',
+                        'Sign Up to continue with Fasal Sarathi',
                         style: TextStyle(color: darkGreen, fontSize: 14),
                       ),
                     ),
@@ -287,10 +287,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   ),
                                   child: isSendingOtp
                                       ? const SizedBox(
-                                          height: 16,
-                                          width: 16,
-                                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                                        )
+                                    height: 16,
+                                    width: 16,
+                                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                  )
                                       : Text(_otpSent ? 'Resend' : 'Send OTP',style: TextStyle(color: Colors.white)),
                                 ),
                               ],
@@ -321,7 +321,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 ),
                               ),
                               crossFadeState:
-                                  _otpSent ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                              _otpSent ? CrossFadeState.showSecond : CrossFadeState.showFirst,
                               duration: const Duration(milliseconds: 300),
                             ),
 
@@ -337,11 +337,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   label: const Text('Help',style: TextStyle(color: Colors.green)),
                                   //style: TextButton.styleFrom(foregroundColor: lightGreen),
                                 ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: const Text('New Farmer? Sign Up',
-                                  style: TextStyle(color: Colors.green)),
-                                ),
+                                // TextButton(
+                                //   onPressed: () {},
+                                //   child: const Text('New Farmer? Sign Up',
+                                //       style: TextStyle(color: Colors.green)),
+                                // ),
                               ],
                             ),
 
@@ -361,26 +361,26 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 ),
                                 child: isLoggingIn
                                     ? const SizedBox(
-                                        height: 18,
-                                        width: 18,
-                                        child: CircularProgressIndicator(
-                                            strokeWidth: 2, color: Colors.white),
-                                      )
+                                  height: 18,
+                                  width: 18,
+                                  child: CircularProgressIndicator(
+                                      strokeWidth: 2, color: Colors.white),
+                                )
                                     : Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: const [
-                                          Icon(Icons.agriculture_rounded, color: Colors.white),
-                                          SizedBox(width: 8),
-                                          Text(
-                                            'Login',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.agriculture_rounded, color: Colors.white),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Sign Up',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
                                       ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
 
@@ -447,7 +447,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           width: size,
           height: size,
           decoration:
-              BoxDecoration(color: Colors.white.withOpacity(0.85), shape: BoxShape.circle),
+          BoxDecoration(color: Colors.white.withOpacity(0.85), shape: BoxShape.circle),
         ),
       ),
     );

@@ -1,17 +1,19 @@
 import 'dart:math' as math;
 import 'package:animate_do/animate_do.dart';
+import 'package:fasal_sarathi_mobile/screens/auth/SignUp_screen.dart';
+import 'package:fasal_sarathi_mobile/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
 
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class OpeningAuth extends StatefulWidget {
+  const OpeningAuth({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<OpeningAuth> createState() => _OpeningAuthState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
+class _OpeningAuthState extends State<OpeningAuth> with SingleTickerProviderStateMixin {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
   final FocusNode _otpFocus = FocusNode();
@@ -73,36 +75,36 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     finally {
       //stopping animation when its done
 
-        if (mounted) {
-          _animController.stop();
-          _animController.reset();
-          setState(() {
-            isSendingOtp = false;
-          });
-        }
+      if (mounted) {
+        _animController.stop();
+        _animController.reset();
+        setState(() {
+          isSendingOtp = false;
+        });
+      }
 
     }
   }
 
-    Future<void> _onLoginPressed() async {
-      if (!_otpSent) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Request OTP first')));
-        return;
-      }
-      final otp = _otpController.text.trim();
-      if (otp.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Enter OTP')));
-        return;
-      }
-
-      setState(() => isLoggingIn = true);
-      await Future.delayed(const Duration(milliseconds: 900));
-      setState(() => isLoggingIn = false);
+  Future<void> _onLoginPressed() async {
+    if (!_otpSent) {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logged in — Welcome, Farmer! 🌿')));
+          const SnackBar(content: Text('Request OTP first')));
+      return;
     }
+    final otp = _otpController.text.trim();
+    if (otp.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Enter OTP')));
+      return;
+    }
+
+    setState(() => isLoggingIn = true);
+    await Future.delayed(const Duration(milliseconds: 900));
+    setState(() => isLoggingIn = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Logged in — Welcome, Farmer! 🌿')));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -235,13 +237,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FadeInUp(
-                      duration: const Duration(milliseconds: 400),
-                      child: Text(
-                        'Sign in to continue with Fasal Sarathi',
-                        style: TextStyle(color: darkGreen, fontSize: 14),
-                      ),
-                    ),
                     const SizedBox(height: 14),
 
                     FadeInUp(
@@ -261,89 +256,55 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             Row(
                               children: [
                                 Expanded(
-                                  child: TextField(
-                                    controller: _phoneController,
-                                    keyboardType: TextInputType.phone,
-                                    decoration: InputDecoration(
-                                      prefixIcon: const Icon(Icons.smartphone_outlined),
-                                      hintText: 'Mobile Number',hintStyle: TextStyle(color: Colors.black),
-                                      filled: true,
-                                      fillColor: lightGreen.withOpacity(0.6),
-                                      //labelText: 'Mobile',
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide.none,
+                                  child: ElevatedButton(
+                                    onPressed: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const SignupScreen()),);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: darkGreen,
+                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
+                                    ),
+                                    child: isLoggingIn
+                                        ? const SizedBox(
+                                      height: 18,
+                                      width: 18,
+                                      child: CircularProgressIndicator(
+                                          strokeWidth: 2, color: Colors.white),
+                                    )
+                                        : Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(Icons.agriculture_rounded, color: Colors.white),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          'Sign-Up',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
-                                ElevatedButton(
-                                  onPressed:  isSendingOtp? null : _sendOtp,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: accent,
-                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                  ),
-                                  child: isSendingOtp
-                                      ? const SizedBox(
-                                          height: 16,
-                                          width: 16,
-                                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                                        )
-                                      : Text(_otpSent ? 'Resend' : 'Send OTP',style: TextStyle(color: Colors.white)),
-                                ),
+
                               ],
                             ),
 
                             const SizedBox(height: 12),
 
                             // OTP input
-                            AnimatedCrossFade(
-                              firstChild: const SizedBox.shrink(),
-                              secondChild: FadeInUp(
-                                duration: const Duration(milliseconds: 350),
-                                child: TextField(
-                                  controller: _otpController,
-                                  focusNode: _otpFocus,
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    prefixIcon: const Icon(Icons.key_outlined),
-                                    hintText: 'Enter OTP',
-                                    //labelText: 'OTP',
-                                    filled: true,
-                                    fillColor: lightGreen.withOpacity(0.6),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide.none,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              crossFadeState:
-                                  _otpSent ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-                              duration: const Duration(milliseconds: 300),
-                            ),
+
 
                             const SizedBox(height: 14),
 
                             // Helper buttons
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton.icon(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.info_outline, size: 18,color: Colors.green),
-                                  label: const Text('Help',style: TextStyle(color: Colors.green)),
-                                  //style: TextButton.styleFrom(foregroundColor: lightGreen),
-                                ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: const Text('New Farmer? Sign Up',
-                                  style: TextStyle(color: Colors.green)),
-                                ),
-                              ],
-                            ),
+
 
                             const SizedBox(height: 8),
 
@@ -351,7 +312,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
-                                onPressed: isLoggingIn ? null : _onLoginPressed,
+                                onPressed: (){
+
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginScreen()),);
+                                },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: darkGreen,
                                   padding: const EdgeInsets.symmetric(vertical: 14),
@@ -361,26 +325,26 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 ),
                                 child: isLoggingIn
                                     ? const SizedBox(
-                                        height: 18,
-                                        width: 18,
-                                        child: CircularProgressIndicator(
-                                            strokeWidth: 2, color: Colors.white),
-                                      )
+                                  height: 18,
+                                  width: 18,
+                                  child: CircularProgressIndicator(
+                                      strokeWidth: 2, color: Colors.white),
+                                )
                                     : Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: const [
-                                          Icon(Icons.agriculture_rounded, color: Colors.white),
-                                          SizedBox(width: 8),
-                                          Text(
-                                            'Login',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.agriculture_rounded, color: Colors.white),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      'Log-In',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
                                       ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
 
@@ -447,7 +411,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           width: size,
           height: size,
           decoration:
-              BoxDecoration(color: Colors.white.withOpacity(0.85), shape: BoxShape.circle),
+          BoxDecoration(color: Colors.white.withOpacity(0.85), shape: BoxShape.circle),
         ),
       ),
     );

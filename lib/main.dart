@@ -1,3 +1,4 @@
+import 'package:fasal_sarathi_mobile/opening/opening_Auth.dart';
 import 'package:fasal_sarathi_mobile/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginScreen());
+    return MaterialApp(home: OpeningAuth());
   }
 }
 
