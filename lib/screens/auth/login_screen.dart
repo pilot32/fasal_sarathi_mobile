@@ -246,13 +246,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 ),
                                 const SizedBox(width: 10),
                                 ElevatedButton(
-                                  onPressed: _isLoading ? null : _sendOtp,
+                                  onPressed:  isSendingOtp? null : _sendOtp,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: accent,
                                     padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                   ),
-                                  child: _isLoading
+                                  child: isSendingOtp
                                       ? const SizedBox(
                                           height: 16,
                                           width: 16,
@@ -318,7 +318,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
-                                onPressed: _isLoading ? null : _onLoginPressed,
+                                onPressed: isLoggingIn ? null : _onLoginPressed,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: darkGreen,
                                   padding: const EdgeInsets.symmetric(vertical: 14),
@@ -326,7 +326,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                child: _isLoading
+                                child: isLoggingIn
                                     ? const SizedBox(
                                         height: 18,
                                         width: 18,
